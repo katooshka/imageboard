@@ -1,0 +1,159 @@
+.form {
+
+}
+
+.myform {
+    margin-left: auto;
+    display: block;
+    margin-right: auto;
+    width: 50%;
+}
+
+form {
+    display: none;
+    margin: 0;
+}
+
+#form {
+    display: none;
+}
+
+.form-invoked {
+    display: block !important;
+}
+
+paper-button {
+    background: #ff9b8e;
+}
+paper-card.op_post {
+    background-color: #f02c0b;
+    display: table;
+    margin: 30px;
+    padding: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+img {
+    width: 80px;
+    /*text-align: center;*/
+}
+
+paper-card.boards_list.x-scope-paper-card-0 {
+    width : 70px;
+    text-align: center;
+    display: block;
+}
+
+li {
+    font-size: larger;
+}
+
+paper-card.op_post_in_thread {
+    background-color: #f02c0b;
+    display: table;
+    margin: 30px;
+    padding: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.board_title {
+    display: inline;
+}
+
+.boards_names {
+    display: block;
+    text-align: center;
+}
+
+.board_highlighted {
+    background-color: #c6ff00;
+}
+
+h1 {
+    color: #0b8043;
+    display: inline;
+    /*text-align: center;*/
+}
+
+/*.boards_list {*/
+    /*display: block;*/
+    /*text-align: center;*/
+/*}*/
+
+body {
+    background: #eee;
+}
+
+.posts {
+    display: table;
+    margin: 3px;
+    padding: 5px;
+    padding-left: 0px;
+    padding-right: 0px;
+    /*float: left;*/
+    /*width: 70%;*/
+}
+.invisible_posts {
+    display: none;
+}
+
+.main_title {
+    text-align: center;
+}
+/*.posts .thread_button {*/
+    /*display: none;*/
+/*}*/
+
+.selected {
+    background-color: #b4b0b7 !important;
+}
+
+.buttons {
+    /*margin-left: 60%;*/
+    /*float: right;*/
+    display: inline;
+}
+
+h2 {
+    font-size: small;
+    font-style: italic;
+    margin: 1px 5px;
+    padding: 3px;
+    background-color: rgb(180, 176, 183);
+    border-radius: 3px;
+}
+
+.paper-card-0 {
+    background-color: #c4f024;
+}
+
+.x-scope-paper-card-0 {
+    padding: 10px;
+    margin-left: 30px;
+}
+
+paper-card div {
+    margin: 1px 5px 3px;
+}
+
+.paper-icon-button-0 {
+    width: 20px;
+    height: 20px;
+    /*float: right;*/
+    padding: 0;
+}
+
+paper-ripple {
+    display: none;
+}
+
+a:link {
+    font-size: 16px;
+    color: #f02c0b;
+}
+
+a:visited {
+    font-size: 16px;
+    color: #7b787d
+}
