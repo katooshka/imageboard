@@ -1,7 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<jsp:useBean id="posts" scope="request" type="java.util.List"/>
+<%--@elvariable id="posts" type="java.util.List"--%>
+<%--@elvariable id="threadId" type="java.util.Integer"--%>
+<%--@elvariable id="formatter" type="java.util.MessageFormatter"--%>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="css/thread.css">
@@ -20,29 +22,34 @@
     <title>/b/</title>
 </head>
 <body>
-<c:forEach var="post" begin = "0" end="${posts.size() - 1}" step="1">
-    <c:set var="class_type" value="posts"/>
-    <c:if test="${post == 0}">
-        <c:set var="class_type" value="op_post_in_thread"/>
+<c:forEach var="post" items="${posts}">
+    <c:set var="classType" value="posts"/>
+    <c:if test="${post.id == posts.get(0).id}">
+        <c:set var="classType" value="op_post_in_thread"/>
     </c:if>
-    <paper-card class="${class_type}" id="post${posts.get(post).number}">
-        <h2>
-                ${posts.get(post).name} ${posts.get(post).getDateAsString()} №<a id="${posts.get(post).number}">${posts.get(post).number}</a>#${post}
-            <paper-icon-button class="button" noink icon="reply" title="reply" number="${posts.get(post).number}"></paper-icon-button>
+    <paper-card class="${classType}" id="post${post.id}">
+        <h2 class="post-heading">
+            <span>${post.author} ${post.postTime.toString()}</span>
+            № <a id="${post.id}">${post.id}</a>
+            <span>#${post.id}</span>
+            <paper-icon-button class="button" noink icon="reply" title="reply" number="${post.id}"></paper-icon-button>
         </h2>
-        <div>${posts.get(post).message}</div>
+        <div>${formatter.format(post.message)}</div>
     </paper-card>
 </c:forEach>
-<paper-card class="myform">
-    <form is="iron-form" id="form" method="post" action="/thread" class="message_form" accept-charset="UTF-8">
+<paper-card class="submit-form">
+    <form is="iron-form" id="submit-form" method="post" action="/thread" class="message-form" accept-charset="UTF-8">
         <div class="card-content">
             <p style="font-style: oblique">Новое сообщение</p>
-            <paper-input value="Аноним" name="name" label="Имя"></paper-input>
-            <paper-textarea value="" name="message_input" id="message_input" label="Сообщение"></paper-textarea>
+            <input type="hidden" name="thread-id" value="${threadId}"/>
+            <paper-input value="Аноним" name="author" label="Имя"></paper-input>
+            <paper-textarea value="" name="message" id="message-input" label="Сообщение"></paper-textarea>
         </div>
         <div class="card-actions">
-            <paper-button id="submit">
-                <iron-icon icon="icons:send"></iron-icon>Отправить</paper-button>
+            <paper-button id="thread-submit">
+                <iron-icon icon="icons:send"></iron-icon>
+                Отправить
+            </paper-button>
         </div>
     </form>
 </paper-card>

@@ -1,5 +1,11 @@
 package servlets;
 
+import data.*;
+import entities.Board;
+import entities.Post;
+import entities.ThreadPreview;
+import org.joda.time.Instant;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,30 +13,44 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet("/board")
 public class BoardServlet extends HttpServlet {
+    private final ThreadPreviewDao threadPreviewDao = new ThreadPreviewDao(new PostsDao(new ConnectionProvider()));
+    private final ThreadDao threadDao = new ThreadDao(new ConnectionProvider());
+    private final BoardDao boardDao = new BoardDao(new ConnectionProvider());
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html; charset=UTF-8");
-        List<ThreadPreview> threads = PostsDao.selectThreadPreviews(request.getParameter("name"));
-        for (ThreadPreview thread : threads) {
-            for (Post post : thread.getTailPosts()){
-                post.setMessage(addLinks(post.getMessage()));
-            }
-        }
+        int boardId = Integer.parseInt(request.getParameter("id"));
+        Board board = boardDao.getBoardById(boardId);
+        List<ThreadPreview> threads = threadPreviewDao.getThreadsPreviews(boardId);
+        MessageFormatter postMessageFormatter = new MessageFormatter();
+        request.setAttribute("board", board);
         request.setAttribute("threads", threads);
+        request.setAttribute("boardId", boardId);
+        request.setAttribute("postMessageFormatter", postMessageFormatter);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/board.jsp");
         dispatcher.forward(request, response);
     }
 
-    private String addLinks(String post) {
-        return post.replaceAll(">>([0-9]+)", "<a class=\"postLink\" href=\"#$1\" ref_id=\"post$1\">&gt;&gt;$1</a>");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        int boardId = Integer.parseInt(request.getParameter("board-id"));
+        Instant postTime = Instant.now();
+        String author = request.getParameter("author");
+        String message = request.getParameter("message");
+        Post opPost = Post.builder()
+                .setPostTime(postTime)
+                .setAuthor(author)
+                .setMessage(message)
+                .build();
+        threadDao.createNewThread(opPost, boardId);
+
+        response.sendRedirect(response.encodeRedirectURL(String.format("/board?id=%d", boardId)));
     }
 }
 

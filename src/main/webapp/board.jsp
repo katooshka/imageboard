@@ -1,7 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<jsp:useBean id="threads" scope="request" type="java.util.List"/>
+<%--@elvariable id="board" type="java.util.servlets.BoardServlet"--%>
+<%--@elvariable id="threads" type="java.util.List"--%>
+<%--@elvariable id="postMessageFormatter" type="java.util.servlets.MessageFormatter"--%>
+
 
 <html>
 <head>
@@ -18,31 +21,45 @@
     <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
     <link rel="import" href="bower_components/iron-collapse/iron-collapse.html">
     <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
-    <title>/b/</title>
+    <title>${board.name}</title>
 </head>
 <body>
-<h1>Досканейм</h1>
+<h1>${board.name}</h1>
 <c:forEach var="thread" items="${threads}">
-    <paper-card class=op_post id="post${thread.getOpPost().number}">
-        <h2>
-                ${thread.getOpPost().name} ${thread.getOpPost().getDateAsString()} №<a
-                id="${thread.getOpPost().number}">${thread.getOpPost().number}</a>
-            <paper-icon-button class="thread_button" noink icon="content-copy" title="content-copy"
-                               number="${thread.getOpPost().number}"></paper-icon-button>
+    <paper-card class="op-post" id="post${thread.opPost.id}">
+        <h2 class="post-heading">
+            <span>${thread.opPost.author} ${thread.opPost.postTime.toString()}</span>
+            № <a id="${thread.opPost.id}">${thread.opPost.id}</a>
+            <paper-icon-button class="thread-button" noink icon="content-copy" title="content-copy"
+                               id="${thread.opPost.threadId}"></paper-icon-button>
         </h2>
-        <div>${thread.getOpPost().message}</div>
+        <div>${postMessageFormatter.format(thread.opPost.message)}</div>
     </paper-card>
-    <c:forEach var="post" items="${thread.getTailPosts()}">
-        <paper-card class=posts id="post${post.number}">
-            <h2>
-                    ${post.name} ${post.getDateAsString()} №<a
-                    id="${post.number}">${post.number}</a>
+    <c:forEach var="post" items="${thread.tailPosts}">
+        <paper-card class="posts" id="post${post.id}">
+            <h2 class="post-heading">
+                <span>${post.author} ${post.postTime.toString()}</span>
+                № <a id="${post.id}">${post.id}</a>
             </h2>
-            <div>${post.message}</div>
+            <div>${postMessageFormatter.format(post.message)}</div>
         </paper-card>
     </c:forEach>
 </c:forEach>
+<paper-card class="submit-form">
+    <form is="iron-form" id="submit-form" method="post" action="/board" class="message-form" accept-charset="UTF-8">
+        <div class="card-content">
+            <p style="font-style: oblique">Новое сообщение</p>
+            <input type="hidden" name="board-id" value="${board.id}"/>
+            <paper-input value="Аноним" name="author" label="Имя"></paper-input>
+            <paper-textarea value="" name="message" id="message" label="Сообщение"></paper-textarea>
+        </div>
+        <div class="card-actions">
+            <paper-button id="submit">
+                <iron-icon icon="icons:send"></iron-icon>
+                Отправить
+            </paper-button>
+        </div>
+    </form>
+</paper-card>
 </body>
 </html>
-
-<%--<meta charset="UTF-8">--%>
