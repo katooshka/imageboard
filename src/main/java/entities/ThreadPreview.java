@@ -1,5 +1,7 @@
 package entities;
 
+import com.google.common.collect.ImmutableList;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -9,7 +11,16 @@ import static data.Constants.MAX_THREAD_TAIL_LENGTH;
 
 public class ThreadPreview {
     private final Post opPost;
-    private final List<Post> tailPosts;
+    private final ImmutableList<Post> tailPosts;
+
+    public static ThreadPreview createFromFullThread(List<Post> thread) {
+        if (thread.size() > MAX_THREAD_TAIL_LENGTH) {
+            return new ThreadPreview(thread.get(0),
+                    thread.subList(thread.size() - MAX_THREAD_TAIL_LENGTH, thread.size()));
+        } else {
+            return new ThreadPreview(thread.get(0), thread.subList(1, thread.size()));
+        }
+    }
 
     public ThreadPreview(Post opPost, List<Post> tailPosts) {;
         checkArgument(checkNotNull(tailPosts).size() <= MAX_THREAD_TAIL_LENGTH);
@@ -17,10 +28,10 @@ public class ThreadPreview {
             checkArgument(tailPost.getThreadId() == opPost.getThreadId());
         }
         this.opPost = checkNotNull(opPost);
-        this.tailPosts = Collections.unmodifiableList(tailPosts);
+        this.tailPosts = ImmutableList.copyOf(tailPosts);
     }
 
-    public List<Post> getTailPosts() {
+    public ImmutableList<Post> getTailPosts() {
         return tailPosts;
     }
 

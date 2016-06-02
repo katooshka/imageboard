@@ -1,5 +1,6 @@
 package data;
 
+import com.google.common.collect.*;
 import entities.Post;
 import entities.ThreadPreview;
 
@@ -8,7 +9,7 @@ import java.util.*;
 import static data.Constants.MAX_THREAD_TAIL_LENGTH;
 
 public class ThreadPreviewDao {
-    private static final Comparator<List<Post>> LAST_POST_ID_ORDER = new Comparator<List<Post>>() {
+    private static final Ordering<List<Post>> LAST_POST_ID_ORDER = new Ordering<List<Post>>() {
         @Override
         public int compare(List<Post> thread1, List<Post> thread2) {
             return Integer.compare(
@@ -22,36 +23,24 @@ public class ThreadPreviewDao {
         this.postsDao = postsDao;
     }
 
-    public List<ThreadPreview> getThreadsPreviews(int boardID) {
+    public ImmutableList<ThreadPreview> getThreadsPreviews(int boardID) {
         List<Post> posts = postsDao.selectPostsByBoard(boardID);
-        List<List<Post>> threadsPosts = new ArrayList<>(groupByThread(posts).values());
-        Collections.sort(threadsPosts, Collections.reverseOrder(LAST_POST_ID_ORDER));
 
-        List<ThreadPreview> threadPreviews = new ArrayList<>();
-        for (List<Post> thread : threadsPosts) {
-            threadPreviews.add(createPreview(thread));
+        List<List<Post>> threads = LAST_POST_ID_ORDER.reverse()
+                .sortedCopy(groupByThread(posts).values());
+
+        ImmutableList.Builder<ThreadPreview> threadPreviews = ImmutableList.builder();
+        for (List<Post> thread : threads) {
+            threadPreviews.add(ThreadPreview.createFromFullThread(thread));
         }
-        return threadPreviews;
+        return threadPreviews.build();
     }
 
     private Map<Integer, List<Post>> groupByThread(List<Post> posts) {
-        Map<Integer, List<Post>> threads = new HashMap<>();
+        ImmutableListMultimap.Builder<Integer, Post> threads = ImmutableListMultimap.builder();
         for (Post post : posts) {
-            int threadId = post.getThreadId();
-            if (!threads.containsKey(threadId)) {
-                threads.put(threadId, new ArrayList<Post>());
-            }
-            threads.get(threadId).add(post);
+            threads.put(post.getThreadId(), post);
         }
-        return threads;
-    }
-
-    private ThreadPreview createPreview(List<Post> thread) {
-        if (thread.size() > MAX_THREAD_TAIL_LENGTH) {
-            return new ThreadPreview(thread.get(0),
-                    thread.subList(thread.size() - MAX_THREAD_TAIL_LENGTH, thread.size()));
-        } else {
-            return new ThreadPreview(thread.get(0), thread.subList(1, thread.size()));
-        }
+        return Multimaps.asMap(threads.build());
     }
 }

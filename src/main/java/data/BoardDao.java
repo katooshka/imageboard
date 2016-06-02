@@ -1,13 +1,12 @@
 package data;
 
+import com.google.common.collect.ImmutableList;
 import entities.Board;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static data.ExceptionHelper.*;
+import static data.ExceptionHelper.wrapSqlException;
 
 public class BoardDao {
     private final static String SELECT_BOARD = "SELECT * FROM boards ORDER BY address";
@@ -19,11 +18,11 @@ public class BoardDao {
         this.connectionProvider = connectionProvider;
     }
 
-    public List<Board> getBoards() {
+    public ImmutableList<Board> getBoards() {
         try (Connection connection = connectionProvider.get()) {
             try (Statement statement = connection.createStatement()) {
                 ResultSet resultSet = statement.executeQuery(SELECT_BOARD);
-                List<Board> boards = new ArrayList<>();
+                ImmutableList.Builder<Board> boards = ImmutableList.builder();
                 while (resultSet.next()) {
                     boards.add(new Board(
                             resultSet.getInt("id"),
@@ -31,7 +30,7 @@ public class BoardDao {
                             resultSet.getString("name"),
                             resultSet.getString("description")));
                 }
-                return boards;
+                return boards.build();
             }
         } catch (SQLException e) {
             throw wrapSqlException(e);

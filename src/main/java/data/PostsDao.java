@@ -1,11 +1,13 @@
 package data;
 
+import com.google.common.collect.ImmutableList;
 import entities.Post;
 import org.joda.time.Instant;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static data.ExceptionHelper.wrapSqlException;
@@ -27,7 +29,7 @@ public class PostsDao {
         this.connectionProvider = connectionProvider;
     }
 
-    public List<Post> selectPostsByThread(int threadId) {
+    public ImmutableList<Post> selectPostsByThread(int threadId) {
         checkArgument(threadId >= 0);
         try (Connection connection = connectionProvider.get()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_THREAD_QUERY)) {
@@ -39,7 +41,7 @@ public class PostsDao {
         }
     }
 
-    public List<Post> selectPostsByBoard(int boardId) {
+    public ImmutableList<Post> selectPostsByBoard(int boardId) {
         checkArgument(boardId >= 0);
         try (Connection connection = connectionProvider.get()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_BOARD_QUERY)) {
@@ -65,9 +67,9 @@ public class PostsDao {
         }
     }
 
-    private static List<Post> fetchAsPosts(PreparedStatement preparedStatement) throws SQLException {
+    private static ImmutableList<Post> fetchAsPosts(PreparedStatement preparedStatement) throws SQLException {
         try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            List<Post> posts = new ArrayList<>();
+            ImmutableList.Builder<Post> posts = ImmutableList.builder();
             while (resultSet.next()) {
                 posts.add(Post.builder()
                         .setPostTime(Instant.parse(resultSet.getString("post_time")))
@@ -77,7 +79,7 @@ public class PostsDao {
                         .setId(resultSet.getInt("id"))
                         .build());
             }
-            return posts;
+            return posts.build();
         }
     }
 }
