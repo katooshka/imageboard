@@ -4,6 +4,7 @@ import com.google.common.collect.*;
 import entities.Post;
 import entities.ThreadPreview;
 
+import javax.inject.Inject;
 import java.util.*;
 
 import static data.Constants.MAX_THREAD_TAIL_LENGTH;
@@ -19,6 +20,7 @@ public class ThreadPreviewDao {
     };
     private final PostsDao postsDao;
 
+    @Inject
     public ThreadPreviewDao(PostsDao postsDao) {
         this.postsDao = postsDao;
     }

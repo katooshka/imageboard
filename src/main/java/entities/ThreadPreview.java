@@ -2,6 +2,7 @@ package entities;
 
 import com.google.common.collect.ImmutableList;
 
+import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
 

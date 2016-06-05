@@ -3,6 +3,7 @@ package data;
 import com.google.common.collect.ImmutableList;
 import entities.Board;
 
+import javax.inject.Inject;
 import java.sql.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -14,6 +15,7 @@ public class BoardDao {
 
     private final ConnectionProvider connectionProvider;
 
+    @Inject
     public BoardDao(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }

@@ -6,6 +6,7 @@ import entities.Post;
 import entities.ThreadPreview;
 import org.joda.time.Instant;
 
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,9 +18,18 @@ import java.util.List;
 
 @WebServlet("/board")
 public class BoardServlet extends HttpServlet {
-    private final ThreadPreviewDao threadPreviewDao = new ThreadPreviewDao(new PostsDao(new ConnectionProvider()));
-    private final ThreadDao threadDao = new ThreadDao(new ConnectionProvider());
-    private final BoardDao boardDao = new BoardDao(new ConnectionProvider());
+    private final ThreadPreviewDao threadPreviewDao;
+    private final ThreadDao threadDao;
+    private final BoardDao boardDao;
+
+    @Inject
+    public BoardServlet(ThreadPreviewDao threadPreviewDao,
+                        ThreadDao threadDao,
+                        BoardDao boardDao) {
+        this.threadPreviewDao = threadPreviewDao;
+        this.threadDao = threadDao;
+        this.boardDao = boardDao;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -1,10 +1,10 @@
 package servlets;
 
-import data.ConnectionProvider;
 import data.PostsDao;
 import entities.Post;
 import org.joda.time.Instant;
 
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +16,12 @@ import java.util.List;
 
 @WebServlet("/thread")
 public class ThreadServlet extends HttpServlet {
-    private final PostsDao postsDao = new PostsDao(new ConnectionProvider());
+    private final PostsDao postsDao;
+
+    @Inject
+    public ThreadServlet(PostsDao postsDao) {
+        this.postsDao = postsDao;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

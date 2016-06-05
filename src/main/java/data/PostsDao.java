@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import entities.Post;
 import org.joda.time.Instant;
 
+import javax.inject.Inject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,6 +26,7 @@ public class PostsDao {
 
     private final ConnectionProvider connectionProvider;
 
+    @Inject
     public PostsDao(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }

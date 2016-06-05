@@ -2,6 +2,7 @@ package data;
 
 import entities.Post;
 
+import javax.inject.Inject;
 import java.sql.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -15,6 +16,7 @@ public class ThreadDao {
 
     private final ConnectionProvider connectionProvider;
 
+    @Inject
     public ThreadDao(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
