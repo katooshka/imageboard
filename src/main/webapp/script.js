@@ -81,7 +81,8 @@ const openLocalSubmitForm = function () {
 
         const $textarea = $('#inner-post-submit-form-text');
         let text = $textarea.val();
-        text += '>>' +  $post.attr('post-id') + '\n';
+        text += '>>' +  $post.attr('post-id') + '\r\n';
+        $textarea.scrollTop($textarea.prop('scrollHeight') - $textarea.height());
         $textarea.val(text);
     }
     previousPostId = currentPostId;

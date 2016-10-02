@@ -1,13 +1,13 @@
-/*MAIN PAGE*/
+ul {
+    overflow-x: auto; /* Fix for bullets overlapping floating elements */
+}
 
 #main-html{
     background: url(/pattern4.jpg);
 }
 
 .main-body {
-    /*background: #aade19 url(/pattern4.jpg);*/
     background: #b0d045 url(/pattern4.jpg);
-    /*#b0d045*/
 }
 
 #base-surface {
@@ -21,7 +21,6 @@
     max-width: 1268px;
     text-align: center;
     border: double rgb(180, 176, 183);
-    /*background: #aade19;*/
     background: #b0d045;
 }
 
@@ -57,11 +56,9 @@
 .board-name {
     text-align: center;
     color: #3e3e40;
-    /*cursor: pointer;*/
 }
 
 .board-highlighted {
-    /*background-color: #aade19;*/
     background-color: #b0d045;
 }
 
@@ -69,16 +66,12 @@
     text-align: center;
     max-width: 230px;
     max-height: 230px;
-    /*cursor: pointer;*/
 }
 
 img {
     max-width: 200px;
     max-height: 150px;
 }
-
-/*BOARD*/
-
 
 body {
     background-color: rgb(221, 241, 205);
@@ -101,7 +94,6 @@ a:visited {
     justify-content: space-around;
     align-items: center;
     border: double rgb(180, 176, 183);
-    /*background: #aade19;*/
     background: #b0d045;
 }
 
@@ -113,14 +105,6 @@ a:visited {
     text-align: center;
     color: #636060;
 }
-
-/*#new-thread-button {*/
-    /*text-align: center;*/
-    /*font-weight: bold;*/
-    /*cursor: pointer;*/
-    /*font-size: x-large;*/
-    /*color: #4b4a49;*/
-/*}*/
 
 .new-post-button {
     text-align: center;
@@ -199,7 +183,6 @@ blockquote {
 .post {
     display: flex;
     flex-direction: column;
-    /*background-color: #a0cc09;*/
     background-color: #b0d045;
     box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
     border-radius: 3px;
@@ -298,7 +281,6 @@ td {
     display: flex;
     flex-direction: row;
     width: 450px;
-    align-self: center;
     justify-content: space-around;
     margin-left: 70px;
     align-self: inherit;
@@ -312,8 +294,6 @@ td {
 #inner-post-submit-form {
     display: none;
 }
-
-/*SMTH*/
 
 .picture {
     margin:30px;
@@ -343,23 +323,12 @@ td {
 
 .popup_img {
     position: relative;
-    margin:0 auto;
     z-index:2;
     max-height:94%;
     max-width:94%;
     margin:1% 0 0 0;
 }
 
-/*POST*/
-
-/*.post-heading {*/
-    /*font-size: small;*/
-    /*font-style: italic;*/
-    /*margin: 1px 5px;*/
-    /*padding: 3px;*/
-    /*background-color: rgb(180, 176, 183);*/
-    /*border-radius: 3px;*/
-/*}*/
 
 .submit-form {
     margin-left: auto;
