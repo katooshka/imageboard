@@ -17,7 +17,7 @@ const onThreadSubmitButtonClick = function () {
 };
 
 const openNewThread = function () {
-    window.open("http://localhost:8080/thread?id=" + $(this).attr('id'), "_blank");
+    window.open('http://localhost:8080/thread?id=' + $(this).attr('id'), '_blank');
 };
 
 const onBoardsMouseIn = function () {
@@ -31,15 +31,15 @@ const onBoardsMouseOut = function () {
 const expandPicture = function () {
     const img = $(this);
     const src = img.attr('src');
-    $("body").append("<div class='popup'>" +
-        "<div class='popup_bg'></div>" +
-        "<img src='" + src + "' class='popup_img' />" +
-        "</div>");
-    $(".popup").fadeIn(400);
-    $(".popup_bg, .popup_img").click(function () {
-        $(".popup").fadeOut(400);
+    $('body').append('<div class="popup">' +
+        '<div class="popup_bg"></div>' +
+        '<img src="' + src + '" class="popup_img" />' +
+        '</div>');
+    $('.popup').fadeIn(400);
+    $('.popup_bg, .popup_img').click(function () {
+        $('.popup').fadeOut(400);
         setTimeout(function () {
-            $(".popup").remove();
+            $('.popup').remove();
         }, 400);
     });
 };
@@ -65,7 +65,7 @@ const fillInDates = function () {
 let previousPostId = null;
 
 const openLocalSubmitForm = function () {
-    const $post = $(this).closest(".post,.op-post");
+    const $post = $(this).closest('.post,.op-post');
     const currentPostId = $post.attr('id');
     const $form = $('#inner-post-submit-form');
 
@@ -78,14 +78,13 @@ const openLocalSubmitForm = function () {
         $form.slideDown(500, function () {
             $('html,body').animate({scrollTop: $post.offset().top});
         });
+
+        const $textarea = $('#inner-post-submit-form-text');
+        let text = $textarea.val();
+        text += '>>' +  $post.attr('post-id') + '\n';
+        $textarea.val(text);
     }
     previousPostId = currentPostId;
-
-    $post.find("blockquote").text()
-};
-
-const insertPostLink = function() {
-
 };
 
 $(document).ready(function () {

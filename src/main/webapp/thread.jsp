@@ -90,7 +90,7 @@
                     <span>Message</span>
                 </td>
                 <td>
-                    <textarea type="text" name="message" maxlength="5000"></textarea>
+                    <textarea id="inner-post-submit-form-text" type="text" name="message" maxlength="5000"></textarea>
                 </td>
             </tr>
         </table>
@@ -112,7 +112,7 @@
     <c:if test="${post.id == posts.get(0).id}">
         <c:set var="classType" value="op-post"/>
     </c:if>
-    <div class="${classType}" id="post${post.id}">
+    <div class="${classType}" id="post${post.id}" post-id="${post.id}">
         <div class="post-heading">
             <span>${post.author}</span>
             <span class="subject">${post.subject}</span>
