@@ -16,14 +16,15 @@ CREATE TABLE threads (
 );
 
 CREATE TABLE posts (
-id        INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-thread_id INT(11) UNSIGNED NOT NULL,
-post_time VARCHAR(100)     NOT NULL,
-author    VARCHAR(100)     NOT NULL,
-message   VARCHAR(1000)    NOT NULL,
-PRIMARY KEY (id),
-KEY post_to_thread (thread_id),
-CONSTRAINT post_to_thread FOREIGN KEY (thread_id) REFERENCES threads (id)
+  id         INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  thread_id  INT(11) UNSIGNED NOT NULL,
+  post_time  VARCHAR(100)     NOT NULL,
+  author     VARCHAR(100)     NOT NULL,
+  message    VARCHAR(1000)    NOT NULL,
+  image_path VARCHAR(1000),
+  PRIMARY KEY (id),
+  KEY post_to_thread (thread_id),
+  CONSTRAINT post_to_thread FOREIGN KEY (thread_id) REFERENCES threads (id)
 );
 
 

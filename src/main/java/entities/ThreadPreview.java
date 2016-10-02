@@ -1,5 +1,6 @@
 package entities;
 
+import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 
 import javax.inject.Inject;
@@ -10,63 +11,48 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static data.Constants.MAX_THREAD_TAIL_LENGTH;
 
-public class ThreadPreview {
-    private final Post opPost;
-    private final ImmutableList<Post> tailPosts;
+@AutoValue
+public abstract class ThreadPreview {
+    public abstract Post getOpPost();
+
+    public abstract ImmutableList<Post> getTailPosts();
 
     public static ThreadPreview createFromFullThread(List<Post> thread) {
         if (thread.size() > MAX_THREAD_TAIL_LENGTH) {
-            return new ThreadPreview(thread.get(0),
-                    thread.subList(thread.size() - MAX_THREAD_TAIL_LENGTH, thread.size()));
+            return ThreadPreview.builder()
+                    .setOpPost(thread.get(0))
+                    .setTailPosts(thread.subList(thread.size() - MAX_THREAD_TAIL_LENGTH, thread.size()))
+                    .build();
         } else {
-            return new ThreadPreview(thread.get(0), thread.subList(1, thread.size()));
+            return ThreadPreview.builder()
+                    .setOpPost(thread.get(0))
+                    .setTailPosts(ImmutableList.copyOf(thread.subList(1, thread.size())))
+                    .build();
         }
     }
+    public static Builder builder() {
+        return new AutoValue_ThreadPreview.Builder();
+    }
 
-    public ThreadPreview(Post opPost, List<Post> tailPosts) {;
-        checkArgument(checkNotNull(tailPosts).size() <= MAX_THREAD_TAIL_LENGTH);
-        for (Post tailPost : tailPosts) {
-            checkArgument(tailPost.getThreadId() == opPost.getThreadId());
+    @AutoValue.Builder
+    public static abstract class Builder {
+        public abstract Builder setOpPost(Post opPost);
+
+        public abstract Builder setTailPosts(ImmutableList<Post> opPost);
+
+        public Builder setTailPosts(List<Post> opPost) {
+            return setTailPosts(ImmutableList.copyOf(opPost));
         }
-        this.opPost = checkNotNull(opPost);
-        this.tailPosts = ImmutableList.copyOf(tailPosts);
-    }
 
-    public ImmutableList<Post> getTailPosts() {
-        return tailPosts;
-    }
+        public abstract ThreadPreview autoBuild();
 
-    public Post getOpPost() {
-        return opPost;
-    }
-
-    public int getThreadId() {
-        return opPost.getThreadId();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ThreadPreview that = (ThreadPreview) o;
-
-        if (opPost != null ? !opPost.equals(that.opPost) : that.opPost != null) return false;
-        return tailPosts != null ? tailPosts.equals(that.tailPosts) : that.tailPosts == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = opPost != null ? opPost.hashCode() : 0;
-        result = 31 * result + (tailPosts != null ? tailPosts.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "ThreadPreview{" +
-                "opPost=" + opPost +
-                ", tailPosts=" + tailPosts +
-                '}';
+        public ThreadPreview build() {
+            ThreadPreview threadPreview = autoBuild();
+            checkArgument(threadPreview.getTailPosts().size() <= MAX_THREAD_TAIL_LENGTH);
+            for (Post tailPost : threadPreview.getTailPosts()) {
+                checkArgument(tailPost.getThreadId() == threadPreview.getOpPost().getThreadId());
+            }
+            return threadPreview;
+        }
     }
 }

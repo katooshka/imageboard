@@ -3,7 +3,8 @@ package data;
 import com.google.common.collect.ImmutableList;
 import entities.Board;
 
-import javax.inject.Inject;
+import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.sql.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -13,24 +14,22 @@ public class BoardDao {
     private final static String SELECT_BOARD = "SELECT * FROM boards ORDER BY address";
     private final static String SELECT_BOARD_BY_ID = "SELECT * FROM boards WHERE id = ?";
 
-    private final ConnectionProvider connectionProvider;
-
-    @Inject
-    public BoardDao(ConnectionProvider connectionProvider) {
-        this.connectionProvider = connectionProvider;
-    }
+    @Resource(mappedName="jdbc/imgbrd")
+    private DataSource dataSource;
 
     public ImmutableList<Board> getBoards() {
-        try (Connection connection = connectionProvider.get()) {
+        try (Connection connection = dataSource.getConnection()) {
             try (Statement statement = connection.createStatement()) {
                 ResultSet resultSet = statement.executeQuery(SELECT_BOARD);
                 ImmutableList.Builder<Board> boards = ImmutableList.builder();
                 while (resultSet.next()) {
-                    boards.add(new Board(
-                            resultSet.getInt("id"),
-                            resultSet.getString("address"),
-                            resultSet.getString("name"),
-                            resultSet.getString("description")));
+                    boards.add(Board.builder()
+                            .setId(resultSet.getInt("id"))
+                            .setAddress(resultSet.getString("address"))
+                            .setName(resultSet.getString("name"))
+                            .setDescription(resultSet.getString("description"))
+                            .setImagePath(resultSet.getString("image_path"))
+                            .build());
                 }
                 return boards.build();
             }
@@ -41,16 +40,17 @@ public class BoardDao {
 
     public Board getBoardById(int boardId) {
         checkArgument(boardId >= 0);
-        try (Connection connection = connectionProvider.get()) {
+        try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_BOARD_BY_ID)) {
                 statement.setInt(1, boardId);
                 ResultSet resultSet = statement.executeQuery();
                 resultSet.next();
-                return new Board(
-                        resultSet.getInt("id"),
-                        resultSet.getString("address"),
-                        resultSet.getString("name"),
-                        resultSet.getString("description"));
+                return Board.builder()
+                        .setId(resultSet.getInt("id"))
+                        .setAddress(resultSet.getString("address"))
+                        .setName(resultSet.getString("name"))
+                        .setDescription(resultSet.getString("description"))
+                        .build();
             }
         } catch (SQLException e) {
             throw wrapSqlException(e);

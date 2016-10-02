@@ -1,13 +1,15 @@
 package data;
 
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.Ordering;
 import entities.Post;
 import entities.ThreadPreview;
 
 import javax.inject.Inject;
-import java.util.*;
-
-import static data.Constants.MAX_THREAD_TAIL_LENGTH;
+import java.util.List;
+import java.util.Map;
 
 public class ThreadPreviewDao {
     private static final Ordering<List<Post>> LAST_POST_ID_ORDER = new Ordering<List<Post>>() {

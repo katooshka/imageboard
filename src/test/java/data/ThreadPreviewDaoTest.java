@@ -66,6 +66,8 @@ public class ThreadPreviewDaoTest {
     private static ThreadPreview preview(Post... posts) {
         Post opPost = posts[0];
         Post[] tail = Arrays.copyOfRange(posts, 1, posts.length);
-        return new ThreadPreview(opPost, ImmutableList.copyOf(tail));
+        return ThreadPreview.builder().
+        setOpPost(opPost)
+        .setTailPosts(ImmutableList.copyOf(tail)).build();
     }
 }
