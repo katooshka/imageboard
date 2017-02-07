@@ -8,17 +8,10 @@ My attempt to implement an anonymous forum (still in development). Accessible on
 
 **Used technologies**
 
-Java
-
-Servlet API, JSP
-
-Glassfish
-
-JDBC
-
-JavaScript
-
-HTML
-
-CSS
-
+*Java
+*Servlet API, JSP
+*Glassfish
+*JDBC
+*JavaScript
+*HTML
+*CSS
