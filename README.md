@@ -1,6 +1,8 @@
 # imageboard
 
-My attempt to implement an anonymous forum (still in development). Accessible on http://kochan.site/
+My attempt to implement an anonymous forum (still in development). 
+
+Accessible on http://kochan.site/
 
 **Demo**
 
