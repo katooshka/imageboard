@@ -4,7 +4,7 @@ My attempt to implement an anonymous forum (still in development). Accessible on
 
 **Demo**
 
-![kochan_demo](http://im.ezgif.com/tmp/ezgif.com-49a554381f.gif)
+![kochan_demo](http://im.ezgif.com/tmp/ezgif.com-d6bed5c051.gif)
 
 **Used technologies**
 
