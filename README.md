@@ -6,7 +6,7 @@ Accessible on http://kochan.site/
 
 **Demo**
 
-![kochan_demo](https://github.com/katooshka/imageboard/raw/master/~/Desktop/kochan.gif/gif.gif)
+![kochan_demo](https://github.com/katooshka/imageboard/raw/master/~/Desktop/kochan.gif/image.png)
 
 **Used technologies**
 
